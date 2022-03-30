@@ -1,5 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { FormControl } from '@angular/forms';
+import {
+  combineLatest,
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  Observable,
+  startWith,
+  tap,
+} from 'rxjs';
 import { Country } from './models/country';
 import { CountryService } from './services/country.service';
 
@@ -13,9 +22,37 @@ export class AppComponent implements OnInit {
 
   countries$!: Observable<Country[]>;
 
+  searchControl = new FormControl(null);
+
   constructor(private _countryService: CountryService) {}
 
   ngOnInit(): void {
-    this.countries$ = this._countryService.getAllCountries();
+    const countries$ = this._countryService.getAllCountries();
+
+    const searchValue$ = this.searchControl.valueChanges.pipe(
+      startWith(''),
+      debounceTime(250),
+      map((value: string) => value),
+      distinctUntilChanged()
+    );
+
+    const filter$ = combineLatest([countries$, searchValue$]);
+
+    this.countries$ = filter$.pipe(
+      map(([countries, searchValue]) =>
+        this._filterFunction(countries, searchValue)
+      ),
+      tap((res) => console.log(res))
+    );
+  }
+
+  private _filterFunction(countries: Country[], searchValue: string) {
+    const lowerCase = searchValue.toLowerCase();
+    return countries.filter(
+      (country) =>
+        country.name?.toLowerCase().includes(lowerCase) ||
+        country.capital?.toLowerCase().includes(lowerCase) ||
+        country.languages?.toLowerCase().includes(lowerCase)
+    );
   }
 }

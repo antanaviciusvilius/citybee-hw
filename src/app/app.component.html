@@ -1,7 +1,11 @@
 <div class="filters">
   <div class="search-form">
     <mat-icon>&#xe8b6;</mat-icon>
-    <input type="text" placeholder="Name, Capital, Language" />
+    <input
+      type="text"
+      placeholder="Name, Capital, Language"
+      [formControl]="searchControl"
+    />
   </div>
 
   <select placeholder="Region">
