@@ -64,14 +64,13 @@ export class AppComponent implements OnInit {
     const lcSearchValue = searchValue.toLowerCase();
     const lcRegionValue = region && region.toLowerCase();
 
-    const countriestest = countries.filter(
+    return countries.filter(
       (country) =>
         (country.name?.toLowerCase().includes(lcSearchValue) ||
           country.capital?.toLowerCase().includes(lcSearchValue) ||
           country.languages?.toLowerCase().includes(lcSearchValue)) &&
         (lcRegionValue ? country.region?.toLowerCase() === lcRegionValue : true)
     );
-    return countriestest;
   }
 
   onFilterClick() {
