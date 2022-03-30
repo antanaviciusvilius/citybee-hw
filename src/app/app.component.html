@@ -22,96 +22,14 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>000001</td>
-      <td>Republic of Lithuania</td>
-      <td>Vilnius</td>
-      <td>Europe</td>
-      <td>Lithuanian</td>
-    </tr>
-    <tr>
-      <td>000001</td>
-      <td>Republic of Lithuania</td>
-      <td>Vilnius</td>
-      <td>Europe</td>
-      <td>Lithuanian</td>
-    </tr>
-    <tr>
-      <td>000001</td>
-      <td>Republic of Lithuania</td>
-      <td>Vilnius</td>
-      <td>Europe</td>
-      <td>Lithuanian</td>
-    </tr>
-    <tr>
-      <td>000001</td>
-      <td>Republic of Lithuania</td>
-      <td>Vilnius</td>
-      <td>Europe</td>
-      <td>Lithuanian</td>
-    </tr>
-    <tr>
-      <td>000001</td>
-      <td>Republic of Lithuania</td>
-      <td>Vilnius</td>
-      <td>Europe</td>
-      <td>Lithuanian</td>
-    </tr>
-    <tr>
-      <td>000001</td>
-      <td>Republic of Lithuania</td>
-      <td>Vilnius</td>
-      <td>Europe</td>
-      <td>Lithuanian</td>
-    </tr>
-    <tr>
-      <td>000001</td>
-      <td>Republic of Lithuania</td>
-      <td>Vilnius</td>
-      <td>Europe</td>
-      <td>Lithuanian</td>
-    </tr>
-    <tr>
-      <td>000001</td>
-      <td>Republic of Lithuania</td>
-      <td>Vilnius</td>
-      <td>Europe</td>
-      <td>Lithuanian</td>
-    </tr>
-    <tr>
-      <td>000001</td>
-      <td>Republic of Lithuania</td>
-      <td>Vilnius</td>
-      <td>Europe</td>
-      <td>Lithuanian</td>
-    </tr>
-    <tr>
-      <td>000001</td>
-      <td>Republic of Lithuania</td>
-      <td>Vilnius</td>
-      <td>Europe</td>
-      <td>Lithuanian</td>
-    </tr>
-    <tr>
-      <td>000001</td>
-      <td>Republic of Lithuania</td>
-      <td>Vilnius</td>
-      <td>Europe</td>
-      <td>Lithuanian</td>
-    </tr>
-    <tr>
-      <td>000001</td>
-      <td>Republic of Lithuania</td>
-      <td>Vilnius</td>
-      <td>Europe</td>
-      <td>Lithuanian</td>
-    </tr>
-    <tr>
-      <td>000001</td>
-      <td>Republic of Lithuania</td>
-      <td>Vilnius</td>
-      <td>Europe</td>
-      <td>Lithuanian</td>
+    <tr *ngFor="let country of countries$ | async">
+      <td>
+        <img class="country-flag" [src]="country.flag" [alt]="country.name" />
+      </td>
+      <td>{{ country.name }}</td>
+      <td>{{ country.capital }}</td>
+      <td>{{ country.region }}</td>
+      <td>{{ country.languages }}</td>
     </tr>
   </tbody>
 </table>

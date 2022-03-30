@@ -50,7 +50,7 @@ table {
   border-collapse: collapse;
   min-width: 100%;
   grid-template-columns:
-    minmax(150px, 1fr)
+    minmax(120px, 0.75fr)
     minmax(150px, 1.67fr)
     minmax(150px, 1.67fr)
     minmax(150px, 1.67fr)
@@ -83,12 +83,18 @@ th {
   text-transform: uppercase;
 }
 
-th:last-child {
-  border: 0;
+td {
+  color: rgba(0, 0, 0, 0.87);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  border-bottom: 1px solid #e5e5e5;
+  display: flex;
+  align-items: center;
 }
 
-td {
-  padding-top: 10px;
-  padding-bottom: 10px;
-  color: #808080;
+.country-flag {
+  width: 100%;
+  max-width: 40px;
+  height: auto;
 }
