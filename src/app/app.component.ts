@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import {
+  BehaviorSubject,
   combineLatest,
   debounceTime,
   distinctUntilChanged,
@@ -9,7 +10,7 @@ import {
   startWith,
   tap,
 } from 'rxjs';
-import { Country } from './models/country';
+import { Country, Region } from './models/country';
 import { CountryService } from './services/country.service';
 
 @Component({
@@ -23,6 +24,11 @@ export class AppComponent implements OnInit {
   countries$!: Observable<Country[]>;
 
   searchControl = new FormControl(null);
+  filterControl = new FormControl(null);
+
+  regions = Object.values(Region);
+
+  private _regionSubject$ = new BehaviorSubject<Region | null>(null);
 
   constructor(private _countryService: CountryService) {}
 
@@ -36,23 +42,40 @@ export class AppComponent implements OnInit {
       distinctUntilChanged()
     );
 
-    const filter$ = combineLatest([countries$, searchValue$]);
+    const filter$ = combineLatest([
+      countries$,
+      searchValue$,
+      this._regionSubject$,
+    ]);
 
     this.countries$ = filter$.pipe(
-      map(([countries, searchValue]) =>
-        this._filterFunction(countries, searchValue)
+      map(([countries, searchValue, region]) =>
+        this._searchFn(countries, searchValue, region)
       ),
       tap((res) => console.log(res))
     );
   }
 
-  private _filterFunction(countries: Country[], searchValue: string) {
-    const lowerCase = searchValue.toLowerCase();
-    return countries.filter(
+  private _searchFn(
+    countries: Country[],
+    searchValue: string,
+    region: Region | null
+  ) {
+    const lcSearchValue = searchValue.toLowerCase();
+    const lcRegionValue = region && region.toLowerCase();
+
+    const countriestest = countries.filter(
       (country) =>
-        country.name?.toLowerCase().includes(lowerCase) ||
-        country.capital?.toLowerCase().includes(lowerCase) ||
-        country.languages?.toLowerCase().includes(lowerCase)
+        (country.name?.toLowerCase().includes(lcSearchValue) ||
+          country.capital?.toLowerCase().includes(lcSearchValue) ||
+          country.languages?.toLowerCase().includes(lcSearchValue)) &&
+        (lcRegionValue ? country.region?.toLowerCase() === lcRegionValue : true)
     );
+    return countriestest;
+  }
+
+  onFilterClick() {
+    const region = this.filterControl.value;
+    this._regionSubject$.next(region);
   }
 }
