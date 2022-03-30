@@ -1,9 +1,15 @@
+:host {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
 .filters {
   width: 100%;
   display: flex;
   align-items: center;
   background-color: #fafafa;
   padding: 16px 32px;
+  height: 80px;
 
   .search-form {
     background-color: #f3f3f4;
@@ -55,6 +61,8 @@ table {
     minmax(150px, 1.67fr)
     minmax(150px, 1.67fr)
     minmax(150px, 3.33fr);
+  overflow-y: auto;
+  flex: 1;
 }
 
 thead,
@@ -65,13 +73,14 @@ tr {
 
 th,
 td {
-  padding: 16px 32px;
+  padding: 24px 32px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 th {
+  background: #ffffff;
   position: sticky;
   top: 0;
   text-align: left;

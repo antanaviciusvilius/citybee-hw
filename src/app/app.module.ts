@@ -4,15 +4,16 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
+import { HighlightPipe } from './pipes/highlight.pipe';
 
 @NgModule({
-  declarations: [AppComponent],
   imports: [
     BrowserModule,
     MatIconModule,
     HttpClientModule,
     ReactiveFormsModule,
   ],
+  declarations: [AppComponent, HighlightPipe],
   providers: [],
   bootstrap: [AppComponent],
 })

@@ -8,7 +8,6 @@ import {
   map,
   Observable,
   startWith,
-  tap,
 } from 'rxjs';
 import { Country, Region } from './models/country';
 import { CountryService } from './services/country.service';
@@ -29,30 +28,30 @@ export class AppComponent implements OnInit {
   regions = Object.values(Region);
 
   private _regionSubject$ = new BehaviorSubject<Region | null>(null);
+  searchValue$!: Observable<string>;
 
   constructor(private _countryService: CountryService) {}
 
   ngOnInit(): void {
     const countries$ = this._countryService.getAllCountries();
 
-    const searchValue$ = this.searchControl.valueChanges.pipe(
+    this.searchValue$ = this.searchControl.valueChanges.pipe(
       startWith(''),
-      debounceTime(250),
+      debounceTime(100),
       map((value: string) => value),
       distinctUntilChanged()
     );
 
     const filter$ = combineLatest([
       countries$,
-      searchValue$,
+      this.searchValue$,
       this._regionSubject$,
     ]);
 
     this.countries$ = filter$.pipe(
       map(([countries, searchValue, region]) =>
         this._searchFn(countries, searchValue, region)
-      ),
-      tap((res) => console.log(res))
+      )
     );
   }
 

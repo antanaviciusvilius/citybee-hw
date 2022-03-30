@@ -33,10 +33,26 @@
       <td>
         <img class="country-flag" [src]="country.flag" [alt]="country.name" />
       </td>
-      <td>{{ country.name }}</td>
-      <td>{{ country.capital }}</td>
+      <td>
+        <span
+          [innerHtml]="country.name | highlight: (searchValue$ | async) ?? ''"
+        ></span>
+      </td>
+      <td>
+        <span
+          [innerHtml]="
+            country.capital | highlight: (searchValue$ | async) ?? ''
+          "
+        ></span>
+      </td>
       <td>{{ country.region }}</td>
-      <td>{{ country.languages }}</td>
+      <td>
+        <span
+          [innerHtml]="
+            country.languages | highlight: (searchValue$ | async) ?? ''
+          "
+        ></span>
+      </td>
     </tr>
   </tbody>
 </table>
