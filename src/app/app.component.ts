@@ -1,16 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import {
-  BehaviorSubject,
-  combineLatest,
-  debounceTime,
-  distinctUntilChanged,
-  map,
-  Observable,
-  startWith,
-} from 'rxjs';
+import { Store } from '@ngrx/store';
+import { BehaviorSubject, combineLatest, map, Observable, tap } from 'rxjs';
 import { Country, Region } from './models/country';
 import { CountryService } from './services/country.service';
+import { addSearch } from './state/search/search.actions';
+import { Search } from './state/search/search.model';
+import { selectAllSearches } from './state/search/search.selectors';
 
 @Component({
   selector: 'app-root',
@@ -23,35 +19,51 @@ export class AppComponent implements OnInit {
   countries$!: Observable<Country[]>;
 
   searchControl = new FormControl(null);
-  filterControl = new FormControl(null);
+  regionControl = new FormControl(null);
+  latestSearchControl = new FormControl(null);
 
   regions = Object.values(Region);
 
-  private _regionSubject$ = new BehaviorSubject<Region | null>(null);
-  searchValue$!: Observable<string>;
+  filterSubject$ = new BehaviorSubject<{
+    searchTerm: string;
+    region: Region | null;
+  }>({ searchTerm: '', region: null });
 
-  constructor(private _countryService: CountryService) {}
+  searches$ = this._store.select(selectAllSearches);
+
+  @HostListener('document:keypress', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      this.onFilterClick();
+    }
+  }
+
+  constructor(private _countryService: CountryService, private _store: Store) {}
 
   ngOnInit(): void {
     const countries$ = this._countryService.getAllCountries();
 
-    this.searchValue$ = this.searchControl.valueChanges.pipe(
-      startWith(''),
-      debounceTime(100),
-      map((value: string) => value),
-      distinctUntilChanged()
-    );
+    // if we would like to use search function without pressing filter button
+    // const searchValue$ = this.searchControl.valueChanges.pipe(
+    //   startWith(''),
+    //   debounceTime(100),
+    //   map((value: string) => value),
+    //   distinctUntilChanged()
+    // );
 
-    const filter$ = combineLatest([
-      countries$,
-      this.searchValue$,
-      this._regionSubject$,
-    ]);
+    const filter$ = combineLatest([countries$, this.filterSubject$]);
 
     this.countries$ = filter$.pipe(
-      map(([countries, searchValue, region]) =>
-        this._searchFn(countries, searchValue, region)
+      tap(([_, filterValues]) =>
+        this.addSearch(filterValues.searchTerm, filterValues.region)
+      ),
+      map(([countries, filterValues]) =>
+        this._searchFn(countries, filterValues.searchTerm, filterValues.region)
       )
+    );
+
+    const latestSearch$ = this.latestSearchControl.valueChanges.subscribe(
+      (value) => this.setFromLatestSearches(value)
     );
   }
 
@@ -73,7 +85,22 @@ export class AppComponent implements OnInit {
   }
 
   onFilterClick() {
-    const region = this.filterControl.value;
-    this._regionSubject$.next(region);
+    const searchTerm = this.searchControl.value;
+    const region = this.regionControl.value;
+    this.filterSubject$.next({ searchTerm, region });
+  }
+
+  addSearch(searchTerm: string, region: Region | null) {
+    if (!searchTerm && !region) {
+      return;
+    }
+
+    this._store.dispatch(addSearch({ searchTerm, region }));
+  }
+
+  setFromLatestSearches(latestSearch: Search) {
+    this.searchControl.setValue(latestSearch?.searchTerm || '');
+    this.regionControl.setValue(latestSearch?.region || null);
+    this.onFilterClick();
   }
 }

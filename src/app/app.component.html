@@ -8,14 +8,23 @@
     />
   </div>
 
-  <select placeholder="Region" [formControl]="filterControl">
+  <select placeholder="Region" [formControl]="regionControl">
     <option [ngValue]="null">Region</option>
     <option [value]="region" *ngFor="let region of regions">
       {{ region }}
     </option>
   </select>
 
-  <button class="filter-btn" (click)="onFilterClick()">Filter</button>
+  <button type="button" class="filter-btn" (click)="onFilterClick()">
+    Filter
+  </button>
+
+  <select placeholder="Latest searches" [formControl]="latestSearchControl">
+    <option [ngValue]="null">Latest searches</option>
+    <option [ngValue]="search" *ngFor="let search of searches$ | async">
+      {{ search.searchTerm }} {{ search.region }}
+    </option>
+  </select>
 </div>
 
 <table>
@@ -35,13 +44,16 @@
       </td>
       <td>
         <span
-          [innerHtml]="country.name | highlight: (searchValue$ | async) ?? ''"
+          [innerHtml]="
+            country.name | highlight: (filterSubject$ | async)?.searchTerm ?? ''
+          "
         ></span>
       </td>
       <td>
         <span
           [innerHtml]="
-            country.capital | highlight: (searchValue$ | async) ?? ''
+            country.capital
+              | highlight: (filterSubject$ | async)?.searchTerm ?? ''
           "
         ></span>
       </td>
@@ -49,7 +61,8 @@
       <td>
         <span
           [innerHtml]="
-            country.languages | highlight: (searchValue$ | async) ?? ''
+            country.languages
+              | highlight: (filterSubject$ | async)?.searchTerm ?? ''
           "
         ></span>
       </td>
