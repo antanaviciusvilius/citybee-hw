@@ -31,6 +31,8 @@ export class AppComponent implements OnInit {
 
   searches$ = this._store.select(selectAllSearches);
 
+  sortType$ = new BehaviorSubject<keyof Country | null>(null);
+
   @HostListener('document:keypress', ['$event'])
   keyEvent(event: KeyboardEvent) {
     if (event.key === 'Enter') {
@@ -51,14 +53,20 @@ export class AppComponent implements OnInit {
     //   distinctUntilChanged()
     // );
 
-    const filter$ = combineLatest([countries$, this.filterSubject$]);
-
-    this.countries$ = filter$.pipe(
+    const filter$ = combineLatest([countries$, this.filterSubject$]).pipe(
       tap(([_, filterValues]) =>
         this.addSearch(filterValues.searchTerm, filterValues.region)
       ),
       map(([countries, filterValues]) =>
         this._searchFn(countries, filterValues.searchTerm, filterValues.region)
+      )
+    );
+
+    const sortWithFilter$ = combineLatest([filter$, this.sortType$]);
+
+    this.countries$ = sortWithFilter$.pipe(
+      map(([countries, sort]) =>
+        sort ? this._sortFn([...countries], sort) : [...countries]
       )
     );
 
@@ -71,7 +79,7 @@ export class AppComponent implements OnInit {
     countries: Country[],
     searchValue: string,
     region: Region | null
-  ) {
+  ): Country[] {
     const lcSearchValue = searchValue.toLowerCase();
     const lcRegionValue = region && region.toLowerCase();
 
@@ -102,5 +110,20 @@ export class AppComponent implements OnInit {
     this.searchControl.setValue(latestSearch?.searchTerm || '');
     this.regionControl.setValue(latestSearch?.region || null);
     this.onFilterClick();
+  }
+
+  selectSortHeader(column: keyof Country) {
+    if (this.sortType$.value === column) {
+      this.sortType$.next(null);
+      return;
+    }
+    this.sortType$.next(column);
+  }
+
+  private _sortFn(countries: Country[], sortName: keyof Country): Country[] {
+    const countriestest = countries.sort((a, b) =>
+      a[sortName]?.localeCompare(b[sortName])
+    );
+    return countriestest;
   }
 }

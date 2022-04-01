@@ -89,6 +89,26 @@ th {
   line-height: 16px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  display: flex;
+  align-items: center;
+
+  &.sortable {
+    cursor: pointer;
+
+    span {
+      display: none;
+      mat-icon {
+        font-size: 20px;
+      }
+    }
+
+    &:hover,
+    &.sorted {
+      span {
+        display: block;
+      }
+    }
+  }
 }
 
 td {
