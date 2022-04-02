@@ -1,0 +1,79 @@
+:host {
+  overflow-y: auto;
+}
+
+table {
+  display: grid;
+  border-collapse: collapse;
+  min-width: 100%;
+  grid-template-columns:
+    minmax(7.5rem, 0.75fr)
+    minmax(9.375rem, 1.67fr)
+    minmax(9.375rem, 1.67fr)
+    minmax(9.375rem, 1.67fr)
+    minmax(9.375rem, 3.33fr);
+}
+
+thead,
+tbody,
+tr {
+  display: contents;
+}
+
+th,
+td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+th {
+  padding: 1rem 2rem;
+  background: #ffffff;
+  position: sticky;
+  top: 0;
+  text-align: left;
+  color: #999999;
+  font-weight: 500;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+
+  &.sortable {
+    cursor: pointer;
+
+    .icon {
+      display: none;
+      font-size: 1rem;
+      height: unset;
+      width: unset;
+    }
+
+    &:hover,
+    &.sorted {
+      .icon {
+        display: block;
+      }
+    }
+  }
+}
+
+td {
+  padding: 0.875rem 2rem;
+  color: rgba(0, 0, 0, 0.87);
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  border-bottom: 1px solid #e5e5e5;
+  display: flex;
+  align-items: center;
+}
+
+.country-flag {
+  width: 100%;
+  max-width: 2.5rem;
+  height: auto;
+}

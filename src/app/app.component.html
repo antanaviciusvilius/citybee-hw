@@ -8,88 +8,33 @@
     />
   </div>
 
-  <select placeholder="Region" [formControl]="regionControl">
-    <option [ngValue]="null">Region</option>
-    <option [value]="region" *ngFor="let region of regions">
-      {{ region }}
-    </option>
-  </select>
+  <div class="select-wrapper">
+    <select placeholder="Region" [formControl]="regionControl">
+      <option [ngValue]="null">Region</option>
+      <option [value]="region" *ngFor="let region of regions">
+        {{ region }}
+      </option>
+    </select>
+  </div>
 
-  <button type="button" class="filter-btn" (click)="onFilterClick()">
-    Filter
-  </button>
+  <div class="btn-wrapper">
+    <button type="button" class="filter-btn" (click)="onFilterClick()">
+      Filter
+    </button>
+  </div>
 
-  <select placeholder="Latest searches" [formControl]="latestSearchControl">
-    <option [ngValue]="null">Latest searches</option>
-    <option [ngValue]="search" *ngFor="let search of searches$ | async">
-      {{ search.searchTerm }} {{ search.region }}
-    </option>
-  </select>
+  <div class="select-wrapper">
+    <select placeholder="Latest searches" [formControl]="latestSearchControl">
+      <option [ngValue]="null">Latest searches</option>
+      <option [ngValue]="search" *ngFor="let search of searches$ | async">
+        {{ search.searchTerm }} {{ search.region }}
+      </option>
+    </select>
+  </div>
 </div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Flag</th>
-      <th
-        class="sortable"
-        (click)="selectSortHeader('name')"
-        [class.sorted]="(sortType$ | async) === 'name'"
-      >
-        Country name <span><mat-icon>&#xe152;</mat-icon></span>
-      </th>
-      <th
-        class="sortable"
-        (click)="selectSortHeader('capital')"
-        [class.sorted]="(sortType$ | async) === 'capital'"
-      >
-        Capital <span><mat-icon>&#xe152;</mat-icon></span>
-      </th>
-      <th
-        class="sortable"
-        (click)="selectSortHeader('region')"
-        [class.sorted]="(sortType$ | async) === 'region'"
-      >
-        Region <span><mat-icon>&#xe152;</mat-icon></span>
-      </th>
-      <th
-        class="sortable"
-        (click)="selectSortHeader('languages')"
-        [class.sorted]="(sortType$ | async) === 'languages'"
-      >
-        Languages <span><mat-icon>&#xe152;</mat-icon></span>
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let country of countries$ | async">
-      <td>
-        <img class="country-flag" [src]="country.flag" [alt]="country.name" />
-      </td>
-      <td>
-        <span
-          [innerHtml]="
-            country.name | highlight: (filterSubject$ | async)?.searchTerm ?? ''
-          "
-        ></span>
-      </td>
-      <td>
-        <span
-          [innerHtml]="
-            country.capital
-              | highlight: (filterSubject$ | async)?.searchTerm ?? ''
-          "
-        ></span>
-      </td>
-      <td>{{ country.region }}</td>
-      <td>
-        <span
-          [innerHtml]="
-            country.languages
-              | highlight: (filterSubject$ | async)?.searchTerm ?? ''
-          "
-        ></span>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<app-countries-table
+  [countries$]="countries$"
+  [filterSubject$]="filterSubject$"
+  (onColumnClick)="onColumnClick($event)"
+></app-countries-table>

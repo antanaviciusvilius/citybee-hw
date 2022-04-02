@@ -7,6 +7,7 @@ import { StoreModule } from '@ngrx/store';
 import { AppComponent } from './app.component';
 import { HighlightPipe } from './pipes/highlight.pipe';
 import { searchReducer } from './state/search/search.reducer';
+import { CountriesTableComponent } from './components/countries-table/countries-table.component';
 
 @NgModule({
   imports: [
@@ -16,7 +17,7 @@ import { searchReducer } from './state/search/search.reducer';
     ReactiveFormsModule,
     StoreModule.forRoot({ searches: searchReducer }),
   ],
-  declarations: [AppComponent, HighlightPipe],
+  declarations: [AppComponent, HighlightPipe, CountriesTableComponent],
   providers: [],
   bootstrap: [AppComponent],
 })

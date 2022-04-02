@@ -5,7 +5,7 @@ import { BehaviorSubject, combineLatest, map, Observable, tap } from 'rxjs';
 import { Country, Region } from './models/country';
 import { CountryService } from './services/country.service';
 import { addSearch } from './state/search/search.actions';
-import { Search } from './state/search/search.model';
+import { Search, SearchWithoutDate } from './state/search/search.model';
 import { selectAllSearches } from './state/search/search.selectors';
 
 @Component({
@@ -24,10 +24,11 @@ export class AppComponent implements OnInit {
 
   regions = Object.values(Region);
 
-  filterSubject$ = new BehaviorSubject<{
-    searchTerm: string;
-    region: Region | null;
-  }>({ searchTerm: '', region: null });
+  private _filterSubject = new BehaviorSubject<SearchWithoutDate>({
+    searchTerm: '',
+    region: null,
+  });
+  filterSubject$ = this._filterSubject.asObservable();
 
   searches$ = this._store.select(selectAllSearches);
 
@@ -70,11 +71,12 @@ export class AppComponent implements OnInit {
       )
     );
 
-    const latestSearch$ = this.latestSearchControl.valueChanges.subscribe(
-      (value) => this.setFromLatestSearches(value)
+    this.latestSearchControl.valueChanges.subscribe((value) =>
+      this.setFromLatestSearches(value)
     );
   }
 
+  //#region Filter
   private _searchFn(
     countries: Country[],
     searchValue: string,
@@ -95,7 +97,7 @@ export class AppComponent implements OnInit {
   onFilterClick() {
     const searchTerm = this.searchControl.value;
     const region = this.regionControl.value;
-    this.filterSubject$.next({ searchTerm, region });
+    this._filterSubject.next({ searchTerm, region });
   }
 
   addSearch(searchTerm: string, region: Region | null) {
@@ -111,19 +113,18 @@ export class AppComponent implements OnInit {
     this.regionControl.setValue(latestSearch?.region || null);
     this.onFilterClick();
   }
+  //#endregion ---
 
-  selectSortHeader(column: keyof Country) {
-    if (this.sortType$.value === column) {
-      this.sortType$.next(null);
-      return;
-    }
-    this.sortType$.next(column);
-  }
-
+  //#region Sort
   private _sortFn(countries: Country[], sortName: keyof Country): Country[] {
     const countriestest = countries.sort((a, b) =>
       a[sortName]?.localeCompare(b[sortName])
     );
     return countriestest;
   }
+
+  onColumnClick(column: keyof Country | null) {
+    this.sortType$.next(column);
+  }
+  //#endregion ---
 }

@@ -1,0 +1,70 @@
+<table>
+  <thead>
+    <tr>
+      <th>Flag</th>
+      <th
+        class="sortable"
+        (click)="selectSortHeader('name')"
+        [class.sorted]="activeSort === 'name'"
+      >
+        <span>Country name</span>
+        <mat-icon class="icon">&#xe152;</mat-icon>
+      </th>
+      <th
+        class="sortable"
+        (click)="selectSortHeader('capital')"
+        [class.sorted]="activeSort === 'capital'"
+      >
+        <span>Capital</span>
+        <mat-icon class="icon">&#xe152;</mat-icon>
+      </th>
+      <th
+        class="sortable"
+        (click)="selectSortHeader('region')"
+        [class.sorted]="activeSort === 'region'"
+      >
+        <span>Region</span>
+        <mat-icon class="icon">&#xe152;</mat-icon>
+      </th>
+      <th
+        class="sortable"
+        (click)="selectSortHeader('languages')"
+        [class.sorted]="activeSort === 'languages'"
+      >
+        <span>Languages</span>
+        <mat-icon class="icon">&#xe152;</mat-icon>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let country of countries$ | async">
+      <td>
+        <img class="country-flag" [src]="country.flag" [alt]="country.name" />
+      </td>
+      <td>
+        <span
+          [innerHtml]="
+            country.name | highlight: (filterSubject$ | async)?.searchTerm ?? ''
+          "
+        ></span>
+      </td>
+      <td>
+        <span
+          [innerHtml]="
+            country.capital
+              | highlight: (filterSubject$ | async)?.searchTerm ?? ''
+          "
+        ></span>
+      </td>
+      <td>{{ country.region }}</td>
+      <td>
+        <span
+          [innerHtml]="
+            country.languages
+              | highlight: (filterSubject$ | async)?.searchTerm ?? ''
+          "
+        ></span>
+      </td>
+    </tr>
+  </tbody>
+</table>

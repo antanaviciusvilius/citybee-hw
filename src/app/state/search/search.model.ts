@@ -5,3 +5,5 @@ export interface Search {
   region: Region | null;
   date: Date;
 }
+
+export type SearchWithoutDate = Omit<Search, 'date'>;
