@@ -14,8 +14,6 @@ import { selectAllSearches } from './state/search/search.selectors';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  title = 'citybee-hw';
-
   countries$!: Observable<Country[]>;
 
   searchControl = new FormControl(null);
@@ -117,9 +115,9 @@ export class AppComponent implements OnInit {
 
   //#region Sort
   private _sortFn(countries: Country[], sortName: keyof Country): Country[] {
-    const countriestest = countries.sort((a, b) =>
-      a[sortName]?.localeCompare(b[sortName])
-    );
+    const countriestest = countries.sort((a, b) => {
+      return a[sortName]?.localeCompare(b[sortName]!)!;
+    });
     return countriestest;
   }
 

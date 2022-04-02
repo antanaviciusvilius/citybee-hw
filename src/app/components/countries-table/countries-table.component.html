@@ -51,7 +51,7 @@
       <td>
         <span
           [innerHtml]="
-            country.capital
+            country.capital!
               | highlight: (filterSubject$ | async)?.searchTerm ?? ''
           "
         ></span>
