@@ -20,6 +20,9 @@ export class CountriesTableComponent implements OnInit {
   @Input() countries$!: Observable<Country[]>;
   @Input() filterSubject$!: Observable<SearchWithoutDate>;
 
+  @Input() pageSize: number = 5;
+  @Input() pageIndex: number = 1;
+
   @Output() onColumnClick: EventEmitter<keyof Country | null> =
     new EventEmitter();
 

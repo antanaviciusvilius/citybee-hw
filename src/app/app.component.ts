@@ -125,4 +125,8 @@ export class AppComponent implements OnInit {
     this.sortType$.next(column);
   }
   //#endregion ---
+
+  onPageChange(page: any) {
+    console.log(page);
+  }
 }

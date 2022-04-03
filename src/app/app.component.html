@@ -34,7 +34,20 @@
 </div>
 
 <app-countries-table
+  *ngIf="paginator"
   [countries$]="countries$"
   [filterSubject$]="filterSubject$"
   (onColumnClick)="onColumnClick($event)"
+  [pageSize]="paginator.pageSize"
+  [pageIndex]="paginator.pageIndex"
 ></app-countries-table>
+
+<mat-paginator
+  class="paginator"
+  [length]="(countries$ | async)?.length"
+  [pageSize]="10"
+  [pageSizeOptions]="[5, 10, 25, 100]"
+  aria-label="Select page"
+  #paginator
+>
+</mat-paginator>

@@ -37,7 +37,13 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let country of countries$ | async">
+    <tr
+      *ngFor="
+        let country of countries$
+          | async
+          | slice: pageIndex * pageSize:(pageIndex + 1) * pageSize
+      "
+    >
       <td>
         <img class="country-flag" [src]="country.flag" [alt]="country.name" />
       </td>
