@@ -37,7 +37,7 @@
 
 .select-wrapper {
   position: relative;
-  max-width: 15rem;
+  max-width: 18.5rem;
   width: 100%;
 
   @media only screen and (max-width: 768px) {
@@ -69,6 +69,8 @@
     position: relative;
 
     cursor: pointer;
+
+    color: #888888;
   }
 }
 
@@ -92,7 +94,6 @@
 }
 
 .paginator {
-  padding: 0.5rem 2rem;
   background-color: #fafafa;
   margin-top: auto;
 }

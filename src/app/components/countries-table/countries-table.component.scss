@@ -7,11 +7,11 @@ table {
   border-collapse: collapse;
   min-width: 100%;
   grid-template-columns:
-    minmax(7.5rem, 0.75fr)
-    minmax(9.375rem, 1.67fr)
-    minmax(9.375rem, 1.67fr)
-    minmax(9.375rem, 1.67fr)
-    minmax(9.375rem, 3.33fr);
+    minmax(6.5rem, 0.1fr)
+    minmax(6.375rem, 1.1fr)
+    minmax(6.375rem, 0.5fr)
+    minmax(6.375rem, 0.5fr)
+    minmax(15.375rem, 3.33fr);
 }
 
 thead,
@@ -24,7 +24,6 @@ th,
 td {
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 th {
@@ -41,6 +40,7 @@ th {
   text-transform: uppercase;
   display: flex;
   align-items: center;
+  white-space: nowrap;
 
   &.sortable {
     cursor: pointer;
@@ -70,6 +70,7 @@ td {
   border-bottom: 1px solid #e5e5e5;
   display: flex;
   align-items: center;
+  white-space: wrap;
 }
 
 .country-flag {

@@ -23,7 +23,7 @@ export class CountryService {
                 name: data.name.official,
                 capital: data.capital[0],
                 region: data.region,
-                languages: Object.values(data.languages).join(','),
+                languages: Object.values(data.languages).join(', '),
               };
             }) as Country[]
         )

@@ -1,5 +1,6 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MatPaginator } from '@angular/material/paginator';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, map, Observable, tap } from 'rxjs';
 import { Country, Region } from './models/country';
@@ -14,6 +15,8 @@ import { selectAllSearches } from './state/search/search.selectors';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
+  @ViewChild('paginator') paginator!: MatPaginator;
+
   countries$!: Observable<Country[]>;
 
   searchControl = new FormControl(null);
@@ -96,6 +99,7 @@ export class AppComponent implements OnInit {
     const searchTerm = this.searchControl.value;
     const region = this.regionControl.value;
     this._filterSubject.next({ searchTerm, region });
+    this.paginator.firstPage();
   }
 
   addSearch(searchTerm: string, region: Region | null) {
@@ -125,8 +129,4 @@ export class AppComponent implements OnInit {
     this.sortType$.next(column);
   }
   //#endregion ---
-
-  onPageChange(page: any) {
-    console.log(page);
-  }
 }
